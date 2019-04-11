@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4351439207397340303}
   - component: {fileID: 1520663261196900400}
+  - component: {fileID: 6779736478181235497}
   - component: {fileID: 5022537031181202084}
   m_Layer: 0
   m_Name: Tiles
@@ -77,9 +78,21 @@ SpriteRenderer:
   m_Size: {x: 3.98, y: 3.98}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6779736478181235497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4555969242396847298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a61c936d7cb40f29ed50b584f2f2d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5022537031181202084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,3 +105,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ee4d668c3604ac0b65981475cd0423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tilesPrefab: {fileID: 0}
+  tileColorSprites: []
+  whiteCircleSprite: {fileID: 0}
+  spaceBetween: 0
+  startPosition: {x: 0, y: 0}
+  myGrid: {fileID: 0}
+  player: {fileID: 0}
