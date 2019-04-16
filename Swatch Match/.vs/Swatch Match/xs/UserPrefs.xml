@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{DA78136C-90FF-7092-5B53-3350790CA66B}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameManger.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/playerController.cs">
     <Files>
-      <File FileName="Assets/Scripts/spawnTile.cs" Line="36" Column="1" />
-      <File FileName="Assets/Scripts/grid.cs" Line="15" Column="25" />
-      <File FileName="Assets/Scripts/playerController.cs" Line="69" Column="13" />
-      <File FileName="Assets/Scripts/GameManger.cs" Line="16" Column="21" />
+      <File FileName="Assets/Scripts/spawnTile.cs" Line="41" Column="37" />
+      <File FileName="Assets/Scripts/grid.cs" Line="86" Column="51" />
+      <File FileName="Assets/Scripts/playerController.cs" Line="184" Column="35" />
+      <File FileName="Assets/Scripts/GameManger.cs" Line="23" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

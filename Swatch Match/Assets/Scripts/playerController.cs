@@ -8,12 +8,10 @@ using UnityEngine.SceneManagement;
 
 public class playerController : MonoBehaviour
 {
-    string playerInput;
+
     grid mygrid;
-    GameObject swapTile;
-    GameObject myTile;
     public GameObject myPlayer;
-    private int moves;
+    public int moves;
     public char column;
     public char row;
     private GameObject[,] _allTiles;
@@ -35,8 +33,10 @@ public class playerController : MonoBehaviour
         mygrid = FindObjectOfType<grid>();
         mygrid.GetComponent<grid>().generateGrid();
         _allTiles = mygrid.GetComponent<grid>().allTiles;
+        //mygrid.CheckForMatches();
         playerTilePos = new Vector2Int(2, 3);
         moves = 6;
+
        
     }
 
@@ -65,7 +65,7 @@ public class playerController : MonoBehaviour
         }
 
 
-        if(moves <= 0)
+        if(moves == 0)
         {
             SceneManager.LoadScene(1);
         }
@@ -79,24 +79,33 @@ public class playerController : MonoBehaviour
 
         if (direction == "up" && playerTilePos.y != 0 && moved == false)
         {
-
+            // Getting the position of the target tile
             targetTilePos = new Vector2Int(playerTilePos.x, playerTilePos.y - 1);
+            // Getting the array position of the player
             playerTile = _allTiles[playerTilePos.x, playerTilePos.y];
+            // Getting the array potiion of the target tile
             targetTile = _allTiles[targetTilePos.x, targetTilePos.y];
-
+            //Setting the temporary position to the old position of the player
             tempPos = playerTile.transform.position;
+            //Setting the new position of the player to be the Target gem's old position
             playerTile.transform.position = targetTile.transform.position;
+            //Setting the new position of the target tile to be the old position of the player
             targetTile.transform.position = tempPos;
+            // reseting the array position of the player and target tile
             playerTilePos.y -= 1;
             targetTilePos.y += 1;
+            //reseting the gameobjects in the array 
             _allTiles[playerTilePos.x, playerTilePos.y] = playerTile;
             _allTiles[targetTilePos.x, targetTilePos.y] = targetTile;
+            //renaming the gameobjects to their correct positions in the array
             playerTile.transform.name = playerTilePos.x + "," + playerTilePos.y;
             targetTile.transform.name = targetTilePos.x + "," + targetTilePos.y;
-
+            //moving the text of the object
             myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
+            //making moved to be true to exit the if statement
             moved = true;
-            
+            //mygrid.CheckForMatches();
+
         }
         else if (direction == "down" && playerTilePos.y != 6 && moved == false)
         {
@@ -117,6 +126,7 @@ public class playerController : MonoBehaviour
 
             myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
             moved = true;
+            //mygrid.CheckForMatches();
 
         }
         else if (direction == "right" && playerTilePos.x != 4 && moved == false)
@@ -138,6 +148,7 @@ public class playerController : MonoBehaviour
 
             myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
             moved = true;
+            //mygrid.CheckForMatches();
         }
 
 
@@ -160,11 +171,28 @@ public class playerController : MonoBehaviour
 
             myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
             moved = true;
+            //mygrid.CheckForMatches();
+        }
+        bool playerFoundAMatch = mygrid.CheckForMatches();
+
+        if (playerFoundAMatch == true)
+        {
+           
+            moves = 6;
+            playerMoves.text = "" + moves;
+            Debug.Log("Lets make these gems fall");
+            mygrid.MakeGemsFall();
         }
 
-        moves -= 1;
-        Debug.Log(moves);
-        playerMoves.text = "" + moves;
+        else
+        {
+            moves -= 1;
+            Debug.Log(moves);
+            playerMoves.text = "" + moves;
+        }
+        playerFoundAMatch = false;
+
+
 
     }
     }

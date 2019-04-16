@@ -53,6 +53,7 @@ public class spawnTile : MonoBehaviour
         string playerName = x +  "," + y;
 
         playerTile.transform.parent = player.transform;
+        playerTile.tag = "Player";
         playerTile.name = playerName;
         playerTile.GetComponent<SpriteRenderer>().sprite = playerTilesprite;
         playerTile.transform.position = new Vector2(xPosition, yPosition);
