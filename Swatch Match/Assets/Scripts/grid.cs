@@ -26,6 +26,7 @@ public class grid : MonoBehaviour
     public Color purple = Color.magenta;
     public Color yellow = Color.yellow;
     public Color orange = Color.cyan;
+    public GameObject PLAYERCONTROLLER;
 
 
 
@@ -38,6 +39,7 @@ public class grid : MonoBehaviour
         Myy = startY;
         allTiles = new GameObject[columns, rows];
         empty.tag = "empty";
+
        
 
 
@@ -46,7 +48,7 @@ public class grid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //CheckForMatches();
+        CheckForMatches();
         //refreshGrid();
     }
     public void generateGrid()
@@ -92,12 +94,26 @@ public class grid : MonoBehaviour
         {
             for(int row=0; row<rows; row++)
             {
-
-                if (allTiles[col, row].tag != "Player" && allTiles[col, row] != null && allTiles[col, row].Equals(null))
-                    Debug.Log(allTiles[col, row]);
+                if (allTiles[col, row] == null)
                 {
+
+                    Debug.Log("GameObject is null");
+                }
+                else if ( allTiles[col,row]!=null)
+                {
+
                     allTiles[col, row].transform.parent = gameObject.transform;
                     allTiles[col, row].transform.position = new Vector2(Myx, Myy);
+
+                    if(allTiles[col,row].tag == "player")
+
+                    {
+                        PLAYERCONTROLLER.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(allTiles[col, row].transform.position.x + 0.05f, allTiles[col, row].transform.position.y - 0.05f);
+                        allTiles[col, row].transform.parent = PLAYERCONTROLLER.transform;
+                        allTiles[col, row].transform.position = new Vector2(Myx, Myy);
+                       
+                    }
+
 
                 }
                 Myy -= 1;
@@ -105,6 +121,9 @@ public class grid : MonoBehaviour
             Myy = startY;
             Myx += 1;
         }
+        //CheckForMatches();
+        WaitASec();
+        //RefillGrid();
     }
 
 
@@ -146,6 +165,7 @@ public class grid : MonoBehaviour
             {
                 //matches[i].GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
                 GameObject newExplosion = Instantiate(explosion, allTiles[matchPos[i].x, matchPos[i].y].transform.position, Quaternion.identity);
+                WaitASec();
 
                 allTiles[matchPos[i].x, matchPos[i].y] = null;
                 Destroy(matches[i]);
@@ -162,6 +182,11 @@ public class grid : MonoBehaviour
 
         //Debug.Log("Matched:" + numMatches);
         return matches.Count;
+
+    }
+    private IEnumerator WaitASec()
+    {
+        yield return new WaitForSeconds(1);
 
     }
     public int CheckRow(GameObject currentCell, int col, int row)
@@ -207,8 +232,11 @@ public class grid : MonoBehaviour
             {
                 //matches2[i].GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
                 GameObject newExplosion = Instantiate(explosion, allTiles[matchPos2[i].x, matchPos2[i].y].transform.position, Quaternion.identity);
+                WaitASec();
+
                 allTiles[matchPos2[i].x, matchPos2[i].y] = null;
                 Destroy(matches2[i]);
+
 
 
 
@@ -224,6 +252,7 @@ public class grid : MonoBehaviour
         }
 
         //Debug.Log("Matched:" + numMatches);
+
         return matches2.Count;
 
     }
@@ -262,8 +291,7 @@ public class grid : MonoBehaviour
                     if (countCol >= 3 || countRow >= 3)
                     {
                         playerFoundAMatch = true;
-                        Debug.Log("CountCol:" + countCol);
-                        Debug.Log("CountRow:" + countRow);
+
                         score += countCol + countRow;
                         playerSore.text = "Score:" + score;
 
@@ -281,25 +309,99 @@ public class grid : MonoBehaviour
             }
         }
 
+        WaitASec();
+        MakeGemsFall();
 
         return playerFoundAMatch;
     }
     public void MakeGemsFall()
     {
-        for(int col = columns-1; col>=0; col--)
+        int distance = 0;
+
+        for (int col = 4; col >= 0; col--)
         {
-            for(int row=rows-2; row<=0; row--)
+
+            for (int row = 5; row >= 0; row--)
             {
-                GameObject currentToken = allTiles[col, row];
-                if(allTiles[col, row + 1] == null)
+                Debug.Log(col + "," + row);
+                //if(allTiles[col,row]!=null){
+                GameObject fallingToken = allTiles[col, row];
+                int belowRow = row + 1;
+                distance = 0;
+                Debug.Log("Below Row before While:"+ belowRow);
+                while (allTiles[col, belowRow] == null && belowRow <= 6)
                 {
-                    allTiles[col, row + 1] = currentToken;
-                    allTiles[col, row] = null;
+                    distance++;
+                    belowRow++;
+
+                    if (belowRow == 7)
+                    {
+                        break;
+                    }
+
+                    Debug.Log("My distance is in while:" + distance);
+                    Debug.Log("Below Row in While:" + belowRow);
                 }
+                Debug.Log("My distance is out after while:" + distance);
+
+                if (distance > 0)
+                { 
+
+                    allTiles[col, row+distance] = fallingToken;
+
+                    allTiles[col, row] = null;
+                    refreshGrid();
+                    
+                    //GameObject targetToken = allTiles[col, row + distance];
+                    //Vector2Int fallingTokenPos = new Vector2Int(col, row);
+                    //Vector2Int targetTokenPos = new Vector2Int(col, row + distance);
+                    //GameObject tempPosition = targetToken;
+                    //fallingToken.transform.position = targetToken.transform.position;
+                    //targetToken.transform.position = tempPosition.transform.position;
+                    //fallingTokenPos.y += distance;
+                    //targetTokenPos.y -= distance;
+                    //allTiles[targetTokenPos.x, targetTokenPos.y] = targetToken;
+                    //allTiles[fallingTokenPos.x, fallingTokenPos.y] = fallingToken;
+                    //fallingToken.transform.name = fallingTokenPos.x + "," + fallingTokenPos.y;
+                    //targetToken.transform.name = targetTokenPos.x + "," + targetTokenPos.y;
+                }
+
             }
         }
-        refreshGrid();
+        WaitASec();
     }
+
+   //public void RefillGrid()
+    //{
+        //startX = -2f;
+        //startY = 3f;
+        //Myx = startX;
+        //Myy = startY;
+        //for (int col = 0; col < columns; col++)
+        //{
+        //    for (int row = 0; row < rows; row++)
+        //    {
+        //        if (allTiles[col, row] == null)
+        //        {
+        //            GameObject myTile = spawnTile.GetComponent<spawnTile>().makeRandomTile(Myx, Myy, col, row);
+        //            //myTile.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
+        //            allTiles[col, row] = myTile;
+        //            //Debug.Log(Equals(allTiles[col,row],null));
+        //        }
+
+        //    }
+        //        Myy -= 1;
+        //    }
+        //    Myy = startY;
+        //    Myx += 1;
+        //WaitASec();
+        //}
+    }
+
+
+        //refreshGrid();
+    
+
     //public void MakeGemsFall()
     //{
     ////looping throught the grid backwards
@@ -398,6 +500,6 @@ public class grid : MonoBehaviour
 
     //}
     //}
-}
+
 
 
