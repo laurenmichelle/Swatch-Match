@@ -57,6 +57,8 @@ public class grid : MonoBehaviour
         RefillGrid();
         WaitASec();
 
+        gameObject.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(GameObject.FindGameObjectWithTag("Player").transform.position.x + 0.05f, GameObject.FindGameObjectWithTag("Player").transform.position.y - 0.05f);
+
     }
     public void generateGrid()
     {
@@ -71,6 +73,7 @@ public class grid : MonoBehaviour
                 {
                     GameObject myPlayer = spawnTile.GetComponent<spawnTile>().spawnPlayerTile(Myx, Myy, col, row);
                     allTiles[col, row] = myPlayer;
+                    //myPlayer.transform.parent = gameObject.transform.GetChild(0).transform;
                     //Debug.Log(col + "," + row);
                     playerCreated = true;
 
@@ -97,7 +100,7 @@ public class grid : MonoBehaviour
         startY = 3f;
         Myx = startX;
         Myy = startY;
-        Debug.Log("REFRESHING GRID");
+        //Debug.Log("REFRESHING GRID");
         for (int col=0; col<columns; col++)
         {
             for(int row=0; row<rows; row++)
@@ -112,13 +115,18 @@ public class grid : MonoBehaviour
                     //Debug.Log("Moving object ");
                     allTiles[col, row].transform.parent = gameObject.transform;
                     allTiles[col, row].transform.position = new Vector2(Myx, Myy);
+                    //Debug.Log("We found a regular object!");
 
-                    if(allTiles[col,row].tag == "Player")
+                    if (allTiles[col,row].tag == "Player")
 
                     {
                         //Debug.Log("We found a player!");
                         allTiles[col, row].transform.parent = gameObject.transform.GetChild(0).transform;
                         allTiles[col, row].transform.position = new Vector2(Myx, Myy);
+                        //Debug.Log(_playerController.GetComponent<playerController>().playerTile.Equals(null));
+                        //_playerController.GetComponent<playerController>().playerTile = allTiles[col, row];
+
+
                         gameObject.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(allTiles[col, row].transform.position.x + 0.05f, allTiles[col, row].transform.position.y - 0.05f);
                         //Debug.Log("HELLO LAUREN:" +gameObject.transform.GetChild(0).transform.GetChild(0).name);
                     }
@@ -340,12 +348,12 @@ public class grid : MonoBehaviour
 
             for (int row = 5; row >= 0; row--)
             {
-                Debug.Log(col + "," + row);
+                //Debug.Log(col + "," + row);
                 //if(allTiles[col,row]!=null){
                 GameObject fallingToken = allTiles[col, row];
                 int belowRow = row + 1;
                 distance = 0;
-                Debug.Log("Below Row before While:"+ belowRow);
+                //Debug.Log("Below Row before While:"+ belowRow);
                 while (allTiles[col, belowRow] == null && belowRow <= 6)
                 {
                     distance++;
@@ -356,16 +364,25 @@ public class grid : MonoBehaviour
                         break;
                     }
 
-                    Debug.Log("My distance is in while:" + distance);
-                    Debug.Log("Below Row in While:" + belowRow);
+                    //Debug.Log("My distance is in while:" + distance);
+                    //Debug.Log("Below Row in While:" + belowRow);
                 }
-                Debug.Log("My distance is out after while:" + distance);
+                //Debug.Log("My distance is out after while:" + distance);
 
                 if (distance > 0)
                 { 
 
                     allTiles[col, row+distance] = fallingToken;
+                    //Debug.Log(allTiles[col, row + distance]);
 
+                    //if (allTiles[col,row+distance]!=null && allTiles[col,row+distance].tag == "Player")
+                    //{
+
+                    //    gameObject.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(allTiles[col, row + distance].transform.position.x + 0.05f, allTiles[col, row + distance].transform.position.y - 0.05f);
+
+                    //    //Debug.Log("the tag is not the issue");
+
+                    //}
                     allTiles[col, row] = null;
                     refreshGrid();
                     

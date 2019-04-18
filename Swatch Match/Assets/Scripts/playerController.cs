@@ -15,12 +15,12 @@ public class playerController : MonoBehaviour
     public char column;
     public char row;
     private GameObject[,] _allTiles;
-    private GameObject playerTile;
+    public GameObject playerTile;
     private GameObject targetTile;
     public TextMeshProUGUI playerMoves;
 
     //Positions of GameObjects within the array
-    private Vector2Int playerTilePos;
+    private Vector2Int playerTilePos ;
     private Vector2Int targetTilePos;
     
 
@@ -33,8 +33,10 @@ public class playerController : MonoBehaviour
         mygrid = FindObjectOfType<grid>();
         mygrid.GetComponent<grid>().generateGrid();
         _allTiles = mygrid.GetComponent<grid>().allTiles;
-        //mygrid.CheckForMatches();
+
         playerTilePos = new Vector2Int(2, 3);
+        playerTile = _allTiles[playerTilePos.x, playerTilePos.y];
+        myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
         moves = 6;
 
        
@@ -69,17 +71,51 @@ public class playerController : MonoBehaviour
         {
             SceneManager.LoadScene(1);
         }
-
+        myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
     }
 
+    private Vector2Int FindPlayer(Vector2Int oldPosition)
+    {
+        mygrid.WaitASec();
+        mygrid.WaitASec();
 
+        Vector2Int playerPosInArray = new Vector2Int (0,0);
+        for (int col=0; col<4; col++)
+        {
+            for(int rows=0; rows<6; rows++)
+            {
+                if(_allTiles[col,rows].tag == "Player")
+                {
+                    Debug.Log("FOUND PLAYER POSITION:" +col +"," +rows);
+                    
+                    playerPosInArray = new Vector2Int(col, rows);
+
+                    return playerPosInArray;
+
+                }
+
+
+            }
+        }
+
+
+        return oldPosition;
+
+    }
     private void Swap(string direction)
     {
         bool moved = false;
-
+        mygrid.WaitASec();
+        Vector2Int oldPlayerPos = playerTilePos;
+        playerTilePos = FindPlayer(oldPlayerPos);
+        //if(playerTilePos == new Vector2Int(0, 0))
+        //{
+        //    playerTilePos = FindPlayer();
+        //}
         if (direction == "up" && playerTilePos.y != 0 && moved == false)
         {
             // Getting the position of the target tile
+            //playerTilePos = FindPlayer();
             targetTilePos = new Vector2Int(playerTilePos.x, playerTilePos.y - 1);
             // Getting the array position of the player
             playerTile = _allTiles[playerTilePos.x, playerTilePos.y];
@@ -110,6 +146,7 @@ public class playerController : MonoBehaviour
         else if (direction == "down" && playerTilePos.y != 6 && moved == false)
         {
 
+            //playerTilePos = FindPlayer();
             targetTilePos = new Vector2Int(playerTilePos.x, playerTilePos.y + 1);
             playerTile = _allTiles[playerTilePos.x, playerTilePos.y];
             targetTile = _allTiles[targetTilePos.x, targetTilePos.y];
@@ -131,7 +168,7 @@ public class playerController : MonoBehaviour
         }
         else if (direction == "right" && playerTilePos.x != 4 && moved == false)
         {
-
+            //playerTilePos = FindPlayer();
             targetTilePos = new Vector2Int(playerTilePos.x + 1, playerTilePos.y);
             playerTile = _allTiles[playerTilePos.x, playerTilePos.y];
             targetTile = _allTiles[targetTilePos.x, targetTilePos.y];
@@ -154,7 +191,7 @@ public class playerController : MonoBehaviour
 
         else if (direction == "left" && playerTilePos.x != 0 && moved == false)
         {
-
+            //playerTilePos = FindPlayer();
             targetTilePos = new Vector2Int(playerTilePos.x - 1, playerTilePos.y);
             playerTile = _allTiles[playerTilePos.x, playerTilePos.y];
             targetTile = _allTiles[targetTilePos.x, targetTilePos.y];
@@ -187,13 +224,19 @@ public class playerController : MonoBehaviour
         else
         {
             moves -= 1;
-            Debug.Log(moves);
+            //Debug.Log(moves);
             playerMoves.text = "" + moves;
         }
         playerFoundAMatch = false;
 
 
+        //playerTilePos = FindPlayer();
+        //positionofPlayer(playerTile);
+    }
 
-    }
-    }
+    //public GameObject positionofPlayer(GameObject playerTile) 
+    //{
+    //    return playerTile;
+    //}
+}
 
