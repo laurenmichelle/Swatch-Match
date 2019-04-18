@@ -46,10 +46,17 @@ public class grid : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         CheckForMatches();
-        //refreshGrid();
+        WaitASec();
+        MakeGemsFall();
+        WaitASec();
+        refreshGrid();
+        WaitASec();
+        RefillGrid();
+        WaitASec();
+
     }
     public void generateGrid()
     {
@@ -90,6 +97,7 @@ public class grid : MonoBehaviour
         startY = 3f;
         Myx = startX;
         Myy = startY;
+        Debug.Log("REFRESHING GRID");
         for (int col=0; col<columns; col++)
         {
             for(int row=0; row<rows; row++)
@@ -97,21 +105,22 @@ public class grid : MonoBehaviour
                 if (allTiles[col, row] == null)
                 {
 
-                    Debug.Log("GameObject is null");
+                    //Debug.Log("GameObject is null");
                 }
                 else if ( allTiles[col,row]!=null)
                 {
-
+                    //Debug.Log("Moving object ");
                     allTiles[col, row].transform.parent = gameObject.transform;
                     allTiles[col, row].transform.position = new Vector2(Myx, Myy);
 
-                    if(allTiles[col,row].tag == "player")
+                    if(allTiles[col,row].tag == "Player")
 
                     {
-                        PLAYERCONTROLLER.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(allTiles[col, row].transform.position.x + 0.05f, allTiles[col, row].transform.position.y - 0.05f);
-                        allTiles[col, row].transform.parent = PLAYERCONTROLLER.transform;
+                        //Debug.Log("We found a player!");
+                        allTiles[col, row].transform.parent = gameObject.transform.GetChild(0).transform;
                         allTiles[col, row].transform.position = new Vector2(Myx, Myy);
-                       
+                        gameObject.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(allTiles[col, row].transform.position.x + 0.05f, allTiles[col, row].transform.position.y - 0.05f);
+                        //Debug.Log("HELLO LAUREN:" +gameObject.transform.GetChild(0).transform.GetChild(0).name);
                     }
 
 
@@ -121,9 +130,16 @@ public class grid : MonoBehaviour
             Myy = startY;
             Myx += 1;
         }
-        //CheckForMatches();
-        WaitASec();
+        //WaitASec();
+
+        //CALLING FUNCTION
         //RefillGrid();
+        //CALLING FUNCTION
+
+        //CheckForMatches();
+
+
+
     }
 
 
@@ -184,9 +200,9 @@ public class grid : MonoBehaviour
         return matches.Count;
 
     }
-    private IEnumerator WaitASec()
+    public IEnumerator WaitASec()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
     }
     public int CheckRow(GameObject currentCell, int col, int row)
@@ -309,8 +325,9 @@ public class grid : MonoBehaviour
             }
         }
 
-        WaitASec();
-        MakeGemsFall();
+        //CALLING FUNCTION
+        //WaitASec();
+        //MakeGemsFall();
 
         return playerFoundAMatch;
     }
@@ -371,31 +388,34 @@ public class grid : MonoBehaviour
         WaitASec();
     }
 
-   //public void RefillGrid()
-    //{
-        //startX = -2f;
-        //startY = 3f;
-        //Myx = startX;
-        //Myy = startY;
-        //for (int col = 0; col < columns; col++)
-        //{
-        //    for (int row = 0; row < rows; row++)
-        //    {
-        //        if (allTiles[col, row] == null)
-        //        {
-        //            GameObject myTile = spawnTile.GetComponent<spawnTile>().makeRandomTile(Myx, Myy, col, row);
-        //            //myTile.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
-        //            allTiles[col, row] = myTile;
-        //            //Debug.Log(Equals(allTiles[col,row],null));
-        //        }
+   public void RefillGrid()
+    {
+        startX = -2f;
+        startY = 3f;
+        Myx = startX;
+        Myy = startY;
+        for (int col = 0; col < columns; col++)
+        {
+            for (int row = 0; row < rows; row++)
+            {
+                if (allTiles[col, row] == null)
+                {
 
-        //    }
-        //        Myy -= 1;
-        //    }
-        //    Myy = startY;
-        //    Myx += 1;
-        //WaitASec();
-        //}
+                    GameObject myTile = spawnTile.GetComponent<spawnTile>().makeNewTile(col, row);
+                    //myTile.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
+                    allTiles[col, row] = myTile;
+                    myTile.tag = "newTile";
+                    //Debug.Log(Equals(allTiles[col,row],null));
+                }
+
+            }
+                Myy -= 1;
+            }
+            Myy = startY;
+            Myx += 1;
+
+
+        }
     }
 
 

@@ -180,7 +180,7 @@ public class playerController : MonoBehaviour
            
             moves = 6;
             playerMoves.text = "" + moves;
-            Debug.Log("Lets make these gems fall");
+           
 
         }
 

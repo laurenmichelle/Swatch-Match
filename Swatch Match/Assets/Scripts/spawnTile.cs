@@ -44,6 +44,22 @@ public class spawnTile : MonoBehaviour
 
 
     }
+    public GameObject makeNewTile(int x, int y)
+    {
+        int arrayIndex = Random.Range(0, tileColorSprites.Length);
+        Sprite colorSprite = tileColorSprites[arrayIndex];
+        string _tileColorName = x + "," + y;
+
+        GameObject newTile = Instantiate(tilesPrefab);
+        newTile.transform.parent = myGrid.transform;
+        newTile.name = _tileColorName;
+        newTile.GetComponent<SpriteRenderer>().sprite = colorSprite;
+
+        return newTile;
+
+
+
+    }
 
     public GameObject spawnPlayerTile(float xPosition, float yPosition, int x, int y)
     {

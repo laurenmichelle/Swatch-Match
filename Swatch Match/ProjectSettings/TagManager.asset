@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - empty
+  - newTile
   layers:
   - Default
   - TransparentFX
