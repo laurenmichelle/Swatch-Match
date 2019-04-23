@@ -22,6 +22,8 @@ public class playerController : MonoBehaviour
     //Positions of GameObjects within the array
     private Vector2Int playerTilePos ;
     private Vector2Int targetTilePos;
+    public bool player1stMove = false;
+    public GameObject blood;
     
 
     //Actual Spaces where Tiles should be in the game world
@@ -36,7 +38,7 @@ public class playerController : MonoBehaviour
 
         playerTilePos = new Vector2Int(2, 3);
         playerTile = _allTiles[playerTilePos.x, playerTilePos.y];
-        myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
+        //myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
         moves = 6;
 
        
@@ -66,12 +68,15 @@ public class playerController : MonoBehaviour
             Swap("left");
         }
 
-
-        if(moves == 0)
+        if (player1stMove == false)
+        {
+            mygrid.GetComponent<grid>().score = 0;
+        }
+        if (moves == 0)
         {
             SceneManager.LoadScene(1);
         }
-        myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
+        //myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
     }
 
     private Vector2Int FindPlayer(Vector2Int oldPosition)
@@ -105,13 +110,14 @@ public class playerController : MonoBehaviour
     private void Swap(string direction)
     {
         bool moved = false;
+        player1stMove = true;
         mygrid.WaitASec();
         Vector2Int oldPlayerPos = playerTilePos;
         playerTilePos = FindPlayer(oldPlayerPos);
-        //if(playerTilePos == new Vector2Int(0, 0))
-        //{
-        //    playerTilePos = FindPlayer();
-        //}
+        if(playerTilePos == new Vector2Int(0, 0))
+        {
+            playerTilePos = FindPlayer(playerTilePos);
+        }
         if (direction == "up" && playerTilePos.y != 0 && moved == false)
         {
             // Getting the position of the target tile
@@ -137,7 +143,7 @@ public class playerController : MonoBehaviour
             playerTile.transform.name = playerTilePos.x + "," + playerTilePos.y;
             targetTile.transform.name = targetTilePos.x + "," + targetTilePos.y;
             //moving the text of the object
-            myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
+            //myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
             //making moved to be true to exit the if statement
             moved = true;
             //mygrid.CheckForMatches();
@@ -161,7 +167,7 @@ public class playerController : MonoBehaviour
             playerTile.transform.name = playerTilePos.x + "," + playerTilePos.y;
             targetTile.transform.name = targetTilePos.x + "," + targetTilePos.y;
 
-            myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
+            //myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
             moved = true;
             //mygrid.CheckForMatches();
 
@@ -183,7 +189,7 @@ public class playerController : MonoBehaviour
             playerTile.transform.name = playerTilePos.x + "," + playerTilePos.y;
             targetTile.transform.name = targetTilePos.x + "," + targetTilePos.y;
 
-            myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
+            //myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
             moved = true;
             //mygrid.CheckForMatches();
         }
@@ -206,7 +212,7 @@ public class playerController : MonoBehaviour
             playerTile.transform.name = playerTilePos.x + "," + playerTilePos.y;
             targetTile.transform.name = targetTilePos.x + "," + targetTilePos.y;
 
-            myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
+            //myPlayer.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(playerTile.transform.position.x + 0.05f, playerTile.transform.position.y - 0.05f);
             moved = true;
             //mygrid.CheckForMatches();
         }
@@ -217,7 +223,7 @@ public class playerController : MonoBehaviour
            
             moves = 6;
             playerMoves.text = "" + moves;
-           
+            GameObject newBlood = Instantiate(blood, new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f)), Quaternion.identity);
 
         }
 
@@ -226,6 +232,7 @@ public class playerController : MonoBehaviour
             moves -= 1;
             //Debug.Log(moves);
             playerMoves.text = "" + moves;
+
         }
         playerFoundAMatch = false;
 

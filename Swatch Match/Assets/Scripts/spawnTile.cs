@@ -12,6 +12,7 @@ public class spawnTile : MonoBehaviour
     public Vector2 startPosition;
     public GameObject myGrid;
     public GameObject player;
+   
 
     void Start()
     {

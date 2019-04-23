@@ -27,6 +27,10 @@ public class grid : MonoBehaviour
     public Color yellow = Color.yellow;
     public Color orange = Color.cyan;
     public GameObject PLAYERCONTROLLER;
+    public AudioClip [] soundEffects;
+    public AudioSource mySound;
+    public GameObject blood;
+    public GameObject background;
 
 
 
@@ -39,11 +43,13 @@ public class grid : MonoBehaviour
         Myy = startY;
         allTiles = new GameObject[columns, rows];
         empty.tag = "empty";
+        mySound = background.GetComponent<AudioSource>();
 
-       
 
 
-    }
+
+
+}
 
     // Update is called once per frame
     void LateUpdate()
@@ -57,7 +63,7 @@ public class grid : MonoBehaviour
         RefillGrid();
         WaitASec();
 
-        gameObject.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(GameObject.FindGameObjectWithTag("Player").transform.position.x + 0.05f, GameObject.FindGameObjectWithTag("Player").transform.position.y - 0.05f);
+        //gameObject.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(GameObject.FindGameObjectWithTag("Player").transform.position.x + 0.05f, GameObject.FindGameObjectWithTag("Player").transform.position.y - 0.05f);
 
     }
     public void generateGrid()
@@ -127,7 +133,7 @@ public class grid : MonoBehaviour
                         //_playerController.GetComponent<playerController>().playerTile = allTiles[col, row];
 
 
-                        gameObject.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(allTiles[col, row].transform.position.x + 0.05f, allTiles[col, row].transform.position.y - 0.05f);
+                        //gameObject.transform.GetChild(0).transform.GetChild(0).transform.position = new Vector2(allTiles[col, row].transform.position.x + 0.05f, allTiles[col, row].transform.position.y - 0.05f);
                         //Debug.Log("HELLO LAUREN:" +gameObject.transform.GetChild(0).transform.GetChild(0).name);
                     }
 
@@ -190,9 +196,14 @@ public class grid : MonoBehaviour
                 //matches[i].GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
                 GameObject newExplosion = Instantiate(explosion, allTiles[matchPos[i].x, matchPos[i].y].transform.position, Quaternion.identity);
                 WaitASec();
-
+               
                 allTiles[matchPos[i].x, matchPos[i].y] = null;
                 Destroy(matches[i]);
+                int arrayInt = Random.Range(0, soundEffects.Length);
+
+                mySound.PlayOneShot(soundEffects[arrayInt]);
+
+
 
                 //matches[i].GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
 
@@ -258,22 +269,44 @@ public class grid : MonoBehaviour
                 GameObject newExplosion = Instantiate(explosion, allTiles[matchPos2[i].x, matchPos2[i].y].transform.position, Quaternion.identity);
                 WaitASec();
 
+                //     if (_playerController.GetComponent<playerController>().player1stMove == true)
+                //{
+                //    GameObject newBlood = Instantiate(blood, new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f)), Quaternion.identity);
+                //    List<GameObject> bloodList = new List<GameObject>();
+
+                //    bloodList.Add(newBlood);
+                //    if (bloodList.Count > 10)
+                //    {
+                //        for (int m = 0; m < 8; m++)
+                //        {3
+                //            Destroy(bloodList[m]);
+                //        }
+                //    }
+                //}
+
+
                 allTiles[matchPos2[i].x, matchPos2[i].y] = null;
-                Destroy(matches2[i]);
+                    Destroy(matches2[i]);
+                int arrayInt = Random.Range(0, soundEffects.Length);
 
+                mySound.PlayOneShot(soundEffects[arrayInt]);
 
-
-
-
-
-                //matches2[i].GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
 
 
             }
+           
 
+
+
+
+            //matches2[i].GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
 
 
         }
+
+
+
+
 
         //Debug.Log("Matched:" + numMatches);
 
@@ -317,7 +350,7 @@ public class grid : MonoBehaviour
                         playerFoundAMatch = true;
 
                         score += countCol + countRow;
-                        playerSore.text = "Score:" + score;
+                        playerSore.text = "Death Count:" + score;
 
 
                        //Destroy(newExplosion);
